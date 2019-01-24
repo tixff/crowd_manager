@@ -1,0 +1,41 @@
+spring:
+  profiles:
+    active: dev
+  messages:
+      encoding: UTF-8
+  http:
+    encoding:
+      force: true
+      charset: UTF-8
+      enabled: true
+
+#  thymeleaf:
+#    prefix: /templates/
+#    suffix: .html
+#    mode: HTML
+server:
+  tomcat:
+    uri-encoding: UTF-8
+mybatis:
+  mapper-locations: classpath:mapper/**/*.xml
+  type-aliases-package: com.ti.crowd_manager.mapper
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
+logging:
+  level: info
+
+jasypt:
+  encryptor:
+    password: EbfYkitulv73I2p0mXI50JMXoaxZTKJ
+mail:
+  username: ENC(3Bmai5Ylw8A0rnBW4tpPCErU488R7JiundYXiE/NgcQ=)
+  password: ENC(rggnlKcldZCjVCkLADw8BHqLkCLIp+8VkZxLK1A8ze4=)
+management:
+  endpoints:
+    web:
+      exposure:
+        include: beans,env,mappings,trace
+
+
+
