@@ -8,6 +8,9 @@ import lombok.Data;
  */
 @Data
 public class ResultData {
+    public static final String FAIL="500";
+    public static final String SUCCESS = "200";
+    private String status;
     private String message;
     private Object data;
 

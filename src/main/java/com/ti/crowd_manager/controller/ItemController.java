@@ -58,6 +58,7 @@ public class ItemController {
             Item item = service.findItemById(id);
             resultData.setMessage("查找成功");
             resultData.setData(item);
+            resultData.setStatus(ResultData.SUCCESS);
         } catch (Exception e) {
             resultData.setMessage("查找失败");
             logger.info("查找失败：{}", e.getStackTrace());
@@ -65,4 +66,29 @@ public class ItemController {
         return resultData;
     }
 
+    @GetMapping("delete")
+    public ResultData deleteItemById(Integer id) {
+        ResultData resultData = ResultData.createResultData();
+        try {
+            service.deleteItemById(id);
+            resultData.setMessage("删除成功");
+            resultData.setStatus(ResultData.SUCCESS);
+        } catch (Exception e) {
+            resultData.setMessage("删除失败");
+            resultData.setStatus(ResultData.FAIL);
+        }
+        return resultData;
+    }
+
+    @PostMapping("update")
+    public ResultData updateItem(Item item) {
+        ResultData resultData = ResultData.createResultData();
+        try {
+            service.updateItem(item);
+            resultData.setMessage("更新成功");
+        } catch (Exception e) {
+            resultData.setMessage("更新失败");
+        }
+        return resultData;
+    }
 }
