@@ -2,6 +2,7 @@ package com.ti.crowd_manager.service.impl;
 
 import com.ti.crowd_manager.domain.ItemCat;
 import com.ti.crowd_manager.domain.ItemCatExample;
+import com.ti.crowd_manager.domain.parameter.ItemCateParameter;
 import com.ti.crowd_manager.mapper.ItemCatMapper;
 import com.ti.crowd_manager.result.ItemCatTreeNode;
 import com.ti.crowd_manager.service.ItemCatService;
@@ -33,9 +34,29 @@ public class ItemCatServiceImpl implements ItemCatService {
     }
 
     @Override
-    public Integer addItemCat(ItemCat itemCat) {
-        int itemcatId = mapper.insert(itemCat);
-        return itemcatId;
+    public void addItemCat(ItemCateParameter param) {
+        if (ItemCateParameter.SON_LEVEL.equals(param.getAddway())) {
+            ItemCat parent = mapper.selectByPrimaryKey(param.getParentId());
+            if (parent.getIsParent() == 0) {
+                parent.setIsParent(1);
+                mapper.updateByPrimaryKey(parent);
+            }
+            mapper.insert(param);
+        }
+
+        if (ItemCateParameter.SAME_LEVEL.equals(param.getAddway())) {
+            Integer id = param.getParentId();
+            ItemCat currentLevle = mapper.selectByPrimaryKey(id);
+            Integer parentId = currentLevle.getParentId();
+            param.setParentId(parentId);
+            mapper.insert(param);
+        }
+    }
+
+    @Override
+    public ItemCat findItemCatById(Integer id) {
+        ItemCat itemCat = mapper.selectByPrimaryKey(id);
+        return itemCat;
     }
 
     private ArrayList<ItemCatTreeNode> toFormatTreeDept(List<ItemCat> list) {

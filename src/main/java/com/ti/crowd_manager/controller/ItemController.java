@@ -2,16 +2,14 @@ package com.ti.crowd_manager.controller;
 
 import com.ti.crowd_manager.domain.Item;
 import com.ti.crowd_manager.domain.ItemDetail;
+import com.ti.crowd_manager.domain.parameter.QueryParameter;
 import com.ti.crowd_manager.result.ResultData;
 import com.ti.crowd_manager.service.ItemDetailService;
 import com.ti.crowd_manager.service.ItemService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
 
@@ -71,6 +69,7 @@ public class ItemController {
         ResultData resultData = ResultData.createResultData();
         try {
             service.deleteItemById(id);
+            itemDetailService.deleteItemDetailByItemId(id);
             resultData.setMessage("删除成功");
             resultData.setStatus(ResultData.SUCCESS);
         } catch (Exception e) {
@@ -83,12 +82,39 @@ public class ItemController {
     @PostMapping("update")
     public ResultData updateItem(Item item) {
         ResultData resultData = ResultData.createResultData();
+        ItemDetail detail = new ItemDetail();
         try {
             service.updateItem(item);
+            detail.setItemId(item.getId());
+            detail.setContent(item.getItemDetail());
+            itemDetailService.updateByItemId(detail);
             resultData.setMessage("更新成功");
         } catch (Exception e) {
             resultData.setMessage("更新失败");
         }
+        return resultData;
+    }
+
+    @PostMapping("batchRemove")
+    public ResultData batchRemove(@RequestParam(value = "ids[]") Integer[] ids) {
+
+        ResultData resultData = ResultData.createResultData();
+        if (ids == null) {
+            resultData.setMessage("批量删除失败");
+            return resultData;
+        }
+        QueryParameter param = new QueryParameter();
+        param.setIds(ids);
+        try {
+            service.bathRemoveItem(param);
+            itemDetailService.batchRemoveItemDetail(param);
+            resultData.setMessage("批量删除成功");
+            resultData.setStatus(ResultData.SUCCESS);
+        } catch (Exception e) {
+            resultData.setMessage("批量删除失败");
+            resultData.setStatus(ResultData.FAIL);
+        }
+
         return resultData;
     }
 }

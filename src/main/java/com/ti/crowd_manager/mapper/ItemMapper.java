@@ -2,8 +2,10 @@ package com.ti.crowd_manager.mapper;
 
 import com.ti.crowd_manager.domain.Item;
 import com.ti.crowd_manager.domain.ItemExample;
+import com.ti.crowd_manager.domain.parameter.QueryParameter;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public interface ItemMapper {
@@ -95,5 +97,10 @@ public interface ItemMapper {
      */
     int updateByPrimaryKey(Item record);
 
+    // create by ti
     int selectIdByName(String name);
+
+    ArrayList<Item> selectByLimit(QueryParameter parameter);
+
+    void deleteItemByIds(QueryParameter parameter);
 }

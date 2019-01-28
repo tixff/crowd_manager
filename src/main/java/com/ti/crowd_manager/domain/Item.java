@@ -633,4 +633,15 @@ public class Item {
     public void setStatus(Integer status) {
         this.status = status;
     }
+
+    //create by ti
+    private String  itemDetail;
+
+    public String getItemDetail() {
+        return itemDetail;
+    }
+
+    public void setItemDetail(String itemDetail) {
+        this.itemDetail = itemDetail;
+    }
 }

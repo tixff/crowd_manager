@@ -23,12 +23,6 @@
 
 <body>
 <div class="x-nav">
-      <span class="layui-breadcrumb">
-        <a href="">首页</a>
-        <a href="">演示</a>
-        <a>
-          <cite>导航元素</cite></a>
-      </span>
     <a class="layui-btn layui-btn-small" style="line-height:1.6em;margin-top:3px;float:right" href="javascript:location.replace(location.href);" title="刷新">
         <i class="layui-icon" style="line-height:30px">ဂ</i></a>
 </div>
@@ -37,40 +31,14 @@
         <form class="layui-form layui-col-md12 x-so">
             <input class="layui-input" placeholder="开始日" name="start" id="start">
             <input class="layui-input" placeholder="截止日" name="end" id="end">
-            <div class="layui-input-inline">
-                <select name="contrller">
-                    <option>支付状态</option>
-                    <option>已支付</option>
-                    <option>未支付</option>
-                </select>
-            </div>
-            <div class="layui-input-inline">
-                <select name="contrller">
-                    <option>支付方式</option>
-                    <option>支付宝</option>
-                    <option>微信</option>
-                    <option>货到付款</option>
-                </select>
-            </div>
-            <div class="layui-input-inline">
-                <select name="contrller">
-                    <option value="">订单状态</option>
-                    <option value="0">待确认</option>
-                    <option value="1">已确认</option>
-                    <option value="2">已收货</option>
-                    <option value="3">已取消</option>
-                    <option value="4">已完成</option>
-                    <option value="5">已作废</option>
-                </select>
-            </div>
-            <input type="text" name="username" placeholder="请输入订单号" autocomplete="off" class="layui-input">
+            <input type="text" name="username" placeholder="请输入项目名称" autocomplete="off" class="layui-input">
             <button class="layui-btn" lay-submit="" lay-filter="sreach"><i class="layui-icon">&#xe615;</i></button>
         </form>
     </div>
     <xblock>
         <button class="layui-btn layui-btn-danger" onclick="delAll()"><i class="layui-icon"></i>批量删除</button>
         <button class="layui-btn" onclick="x_admin_show('添加项目','/project-add.html')"><i class="layui-icon"></i>添加</button>
-        <span class="x-right" style="line-height:40px">共有数据：88 条</span>
+        <span class="x-right" style="line-height:40px" th:text="'共有数据：'+${itemPage.totalCount}+' 条'"></span>
     </xblock>
     <table class="layui-table">
         <thead>
@@ -92,9 +60,9 @@
         </tr>
         </thead>
         <tbody>
-        <tr th:each="item:${items}" th:id="${item.id}">
+        <tr th:each="item:${itemPage.data}" th:id="${item.id}">
             <td>
-                <div  class="layui-unselect layui-form-checkbox" lay-skin="primary" data-id='2'><i class="layui-icon">&#xe605;</i></div>
+                <div class="layui-unselect layui-form-checkbox" th:data-id="${item.id}" th:id="${item.id}" lay-skin="primary" data-id='2'><i class="layui-icon">&#xe605;</i></div>
             </td>
             <td th:text="${item.name}"></td>
             <td th:text="${item.intro}"></td>
@@ -120,12 +88,24 @@
     <!--分页-->
     <div class="page">
         <div>
-            <a class="prev" href="">&lt;&lt;</a>
-            <a class="num" href="">1</a>
-            <span class="current">2</span>
-            <a class="num" href="">3</a>
-            <a class="num" href="">489</a>
-            <a class="next" href="">&gt;&gt;</a>
+            <a th:if="${itemPage.currentPage}-1 gt 0 " class="prev" th:href="'/project-list.html?currentPage='+(${itemPage.currentPage}-1)">&lt;&lt;</a>
+
+            <a th:if="${itemPage.currentPage}-1 gt 0 " class="num" href="" th:text="${itemPage.currentPage}-1"
+               th:href="'/project-list.html?currentPage='+(${itemPage.currentPage}-1)"></a>
+
+            <span class="current" th:text="${itemPage.currentPage}"></span>
+
+            <a th:if="${itemPage.currentPage}+1 le ${itemPage.totalPage} "
+               class="num" href="" th:text="${itemPage.currentPage}+1"
+               th:href="'/project-list.html?currentPage='+(${itemPage.currentPage}+1)"></a>
+
+            <a th:if="${itemPage.currentPage}+2 le ${itemPage.totalPage} "
+               class="num" href="" th:text="${itemPage.currentPage}+2"
+               th:href="'/project-list.html?currentPage='+(${itemPage.currentPage}+2)"></a>
+
+            <a th:if="${itemPage.currentPage}+1 le ${itemPage.totalPage} " class="next" th:href="'/project-list.html?currentPage='+(${itemPage.currentPage}+1)">&gt;&gt;</a>
+
+            <span class="layui-text" th:text="'共'+${itemPage.totalPage}+'页'"></span>
         </div>
     </div>
 
@@ -172,8 +152,8 @@
     /*用户-删除*/
     function member_del(obj, id) {
         layer.confirm('确认要删除吗？', function (index) {
-            $.get("/item/delete?id="+id,function (data) {
-                if("200".equals(data.status)){
+            $.get("/item/delete?id=" + id, function (data) {
+                if ("200"==data.status) {
                     $(obj).parents("tr").remove();
                 }
                 layer.msg(data.message, {icon: 1, time: 1000});
@@ -186,11 +166,14 @@
     function delAll(argument) {
 
         var data = tableCheck.getData();
-
-        layer.confirm('确认要删除吗？' + data, function (index) {
-            //捉到所有被选中的，发异步进行删除
-            layer.msg('删除成功', {icon: 1});
-            $(".layui-form-checked").not('.header').parents('tr').remove();
+        layer.confirm('确认要删除吗？', function (index) {
+            $.post("/item/batchRemove", {"ids": data}, function (resultData) {
+                //捉到所有被选中的，发异步进行删除
+                if ("200" == resultData.status) {
+                    $(".layui-form-checked").not('.header').parents('tr').remove();
+                }
+                layer.msg(resultData.message, {icon: 1});
+            });
         });
     }
 </script>

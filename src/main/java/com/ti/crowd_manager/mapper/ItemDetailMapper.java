@@ -2,8 +2,10 @@ package com.ti.crowd_manager.mapper;
 
 import com.ti.crowd_manager.domain.ItemDetail;
 import com.ti.crowd_manager.domain.ItemDetailExample;
-import java.util.List;
+import com.ti.crowd_manager.domain.parameter.QueryParameter;
 import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 public interface ItemDetailMapper {
     /**
@@ -117,4 +119,11 @@ public interface ItemDetailMapper {
      * @mbg.generated Sun Jan 27 13:43:57 CST 2019
      */
     int updateByPrimaryKey(ItemDetail record);
+
+    //create by ti
+     void batchRemoveItemDetail(QueryParameter parameter);
+
+     void deleteByItemId(int id);
+
+     void updateByItemId(ItemDetail detail);
 }

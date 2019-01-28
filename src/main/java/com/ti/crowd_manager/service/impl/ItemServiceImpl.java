@@ -2,10 +2,14 @@ package com.ti.crowd_manager.service.impl;
 
 import com.ti.crowd_manager.domain.Item;
 import com.ti.crowd_manager.domain.ItemExample;
+import com.ti.crowd_manager.domain.parameter.PageQuery;
+import com.ti.crowd_manager.domain.parameter.QueryParameter;
 import com.ti.crowd_manager.mapper.ItemMapper;
+import com.ti.crowd_manager.result.PageResult;
 import com.ti.crowd_manager.service.ItemService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,6 +25,7 @@ public class ItemServiceImpl implements ItemService {
     private ItemMapper mapper;
 
     @Override
+    @Transactional
     public Integer addItem(Item item) {
         int id = mapper.insert(item);
         return id;
@@ -44,13 +49,43 @@ public class ItemServiceImpl implements ItemService {
         return (ArrayList<Item>) items;
     }
 
+
     @Override
+    @Transactional
     public void deleteItemById(Integer id) {
         mapper.deleteByPrimaryKey(id);
     }
 
     @Override
+    @Transactional
     public void updateItem(Item item) {
         mapper.updateByPrimaryKey(item);
+    }
+
+    @Override
+    public PageResult<Item> getItemPage(PageQuery query) {
+        PageResult<Item> pageResult = new PageResult<>();
+        QueryParameter param = new QueryParameter();
+        long start = (query.getCurrentPage() - 1) * query.getRows();
+        long end = query.getRows();
+        param.setStart(start);
+        param.setEnd(end);
+        ItemExample itemExample = new ItemExample();
+        long totalCount = mapper.countByExample(itemExample);
+        ArrayList<Item> items = mapper.selectByLimit(param);
+
+        pageResult.setCurrentPage(query.getCurrentPage());
+        pageResult.setTotalCount(totalCount);
+        pageResult.setData(items);
+        long totalPage = (totalCount % query.getRows()) > 0 ? totalCount / query.getRows() + 1 : totalCount / query.getRows();
+        pageResult.setTotalPage(totalPage);
+
+        return pageResult;
+    }
+
+    @Override
+    @Transactional
+    public void bathRemoveItem(QueryParameter parameter) {
+        mapper.deleteItemByIds(parameter);
     }
 }

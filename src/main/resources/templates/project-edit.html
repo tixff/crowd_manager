@@ -99,8 +99,8 @@
                 >
             </div>
         </div>
-        <input type="text" id="image" name="image" hidden="hidden"/>
-        <img id="tupian" name="tupian" th:src="${item.image}">
+        <input type="text" id="image" th:value="${item.image}" name="image" hidden="hidden"/>
+        <img id="tupian" name="tupian" th:src="'/static/'+${item.image}">
         <br/><br/>
         <!--筹资金额-->
         <div class="layui-form-item">
@@ -128,7 +128,7 @@
                 <span class="x-red">*</span>项目内容
             </label>
             <div class="layui-input-block">
-                <textarea  id="itemDetail" name="itemDetail" rows="30" cols="38"></textarea>
+                <textarea  id="itemDetail" th:text="${item.itemDetail}" name="itemDetail" rows="30" cols="38"></textarea>
             </div>
         </div>
         <!--联系人-->
@@ -180,8 +180,8 @@
                 <input type="file" id="twoCode" name="twoCode" required="required"/>
             </div>
         </div>
-        <input type="text" id="linkmanQrCode" name="linkmanQrCode" hidden="hidden"/>
-        <img id="codeImage" name="codeImage" th:src="${item.linkmanQrCode}">
+        <input type="text" id="linkmanQrCode" th:value="${item.linkmanQrCode}" name="linkmanQrCode" hidden="hidden"/>
+        <img id="codeImage" name="codeImage" th:src="'/static/'+${item.linkmanQrCode}">
     </form>
     <br/>
     <!--提交按钮-->

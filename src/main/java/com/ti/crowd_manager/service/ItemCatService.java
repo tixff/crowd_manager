@@ -1,6 +1,7 @@
 package com.ti.crowd_manager.service;
 
 import com.ti.crowd_manager.domain.ItemCat;
+import com.ti.crowd_manager.domain.parameter.ItemCateParameter;
 import com.ti.crowd_manager.result.ItemCatTreeNode;
 
 import java.util.ArrayList;
@@ -11,5 +12,8 @@ import java.util.ArrayList;
  */
 public interface ItemCatService {
     ArrayList<ItemCatTreeNode> getAllItemCat();
-    Integer addItemCat(ItemCat itemCat);
+
+    void addItemCat(ItemCateParameter param);
+
+    ItemCat findItemCatById(Integer id);
 }

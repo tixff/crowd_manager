@@ -511,4 +511,22 @@
         from item
         where `name` = #{name}
     </select>
+
+    <select id="selectByLimit" parameterType="com.ti.crowd_manager.domain.parameter.QueryParameter" resultMap="BaseResultMap">
+        select *
+        from item
+        limit #{start}, #{end}
+    </select>
+
+    <delete id="deleteItemByIds" parameterType="com.ti.crowd_manager.domain.parameter.QueryParameter">
+        delete from item
+        <where>
+            <if test="ids != null">
+                id in
+                <foreach collection="ids" open="(" separator="," close=")" item="id">
+                    #{id}
+                </foreach>
+            </if>
+        </where>
+    </delete>
 </mapper>

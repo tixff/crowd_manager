@@ -314,4 +314,25 @@
     set item_id = #{itemId,jdbcType=INTEGER}
     where id = #{id,jdbcType=INTEGER}
   </update>
+
+  <!--create by ti-->
+  <delete id="batchRemoveItemDetail" parameterType="com.ti.crowd_manager.domain.parameter.QueryParameter">
+    delete from item_detail
+    <where>
+      <if test="ids != null">
+        item_id in
+        <foreach collection="ids" open="(" separator="," close=")" item="id">
+          #{id}
+        </foreach>
+      </if>
+    </where>
+  </delete>
+
+  <delete id="deleteByItemId" parameterType="int">
+    delete from item_detail where item_id=#{id}
+  </delete>
+
+  <update id="updateByItemId" parameterType="com.ti.crowd_manager.domain.ItemDetail">
+    update item_detail set content=#{content} where item_id=#{itemId}
+  </update>
 </mapper>
