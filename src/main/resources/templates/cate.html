@@ -35,7 +35,7 @@
 </div>
 <div class="x-body">
     <div id="evts" class="demo"></div>
-    <input type="text" id="id" name="id" hidden="hidden" />
+    <input type="text" id="id" name="id" hidden="hidden"/>
     <!--电话-->
     <div class="layui-form-item">
         <label for="name" class="layui-form-label">
@@ -48,9 +48,9 @@
     </div>
     <br/>
     <xblock>
-        <button class="layui-btn layui-btn-danger" onclick="delAll()"><i class="layui-icon"></i>删除</button>
-        <button class="layui-btn" onclick="x_admin_show('添加类目','/cate-add.html?id='+$('#id').val())"><i class="layui-icon"></i>添加</button>
-        <button class="layui-btn" onclick="x_admin_show('修改项目','/cate-add.html?id='+$('#id').val())"><i class="layui-icon"></i>更新</button>
+        <button class="layui-btn layui-btn-danger" onclick="delItemCat($('#id').val())"><i class="layui-icon"></i>删除</button>
+        <button class="layui-btn" onclick="addItemCat()"><i class="layui-icon"></i>添加</button>
+        <button class="layui-btn" onclick=" updateItemCat()"><i class="layui-icon"></i>更新</button>
     </xblock>
 </div>
 
@@ -79,6 +79,39 @@
     });
 </script>
 
+<script>
+
+    function addItemCat() {
+        var str = /^[^\s]+$/;
+        if (!str.test($('#id').val())) {
+            alert("请选择要删除的类目");
+            return;
+        }
+        x_admin_show('添加类目', '/cate-add.html?id=' + $('#id').val())
+    }
+
+    function updateItemCat() {
+        var str = /^[^\s]+$/;
+        if (!str.test($('#id').val())) {
+            alert("请选择要删除的类目");
+            return;
+        }
+        x_admin_show('修改项目', '/cate-update.html?id=' + $('#id').val());
+    }
+
+    function delItemCat(id) {
+        var str = /^[^\s]+$/;
+        if (!str.test($('#id').val())) {
+            alert("请选择要删除的类目");
+            return;
+        }
+        layer.confirm('确认要删除吗？', function (index) {
+            $.post("/itemCat/update", {"id": id}, function (resultData) {
+                layer.msg(resultData.message, {icon: 1});
+            });
+        });
+    }
+</script>
 </body>
 
 </html>

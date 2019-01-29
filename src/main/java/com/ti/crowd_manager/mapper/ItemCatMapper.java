@@ -2,8 +2,9 @@ package com.ti.crowd_manager.mapper;
 
 import com.ti.crowd_manager.domain.ItemCat;
 import com.ti.crowd_manager.domain.ItemCatExample;
-import java.util.List;
 import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 public interface ItemCatMapper {
     /**
@@ -93,4 +94,7 @@ public interface ItemCatMapper {
      * @mbg.generated Sun Jan 27 13:43:57 CST 2019
      */
     int updateByPrimaryKey(ItemCat record);
+
+    //create by ti
+    void updateById(ItemCat itemCat);
 }

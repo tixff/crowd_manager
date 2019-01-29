@@ -16,4 +16,6 @@ public interface ItemCatService {
     void addItemCat(ItemCateParameter param);
 
     ItemCat findItemCatById(Integer id);
+
+    void updateItemCat(ItemCat itemCat);
 }

@@ -1,5 +1,6 @@
 package com.ti.crowd_manager.controller;
 
+import com.ti.crowd_manager.domain.ItemCat;
 import com.ti.crowd_manager.domain.parameter.ItemCateParameter;
 import com.ti.crowd_manager.result.ItemCatTreeNode;
 import com.ti.crowd_manager.result.ResultData;
@@ -47,6 +48,20 @@ public class ItemCatController {
             resultData.setMessage("添加成功");
         } catch (Exception e) {
             resultData.setMessage("添加失败");
+        }
+
+        return resultData;
+    }
+
+    @PostMapping("update")
+    public ResultData updateItemCat(ItemCat itemCat) {
+        ResultData resultData = ResultData.createResultData();
+        itemCat.setUpdateTime(new Date());
+        try {
+            service.updateItemCat(itemCat);
+            resultData.setMessage("更新类目成功");
+        } catch (Exception e) {
+            resultData.setMessage("更新类目失败");
         }
 
         return resultData;

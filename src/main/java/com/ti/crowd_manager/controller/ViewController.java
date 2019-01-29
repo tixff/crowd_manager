@@ -63,4 +63,11 @@ public class ViewController {
         model.addAttribute("itemCat", itemCat);
         return "cate-add";
     }
+
+    @GetMapping("/cate-update.html")
+    public String updateItemCat(Model model, Integer id) {
+        ItemCat itemCat = itemCatService.findItemCatById(id);
+        model.addAttribute("itemCat", itemCat);
+        return "cate-update";
+    }
 }

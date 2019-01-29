@@ -10,8 +10,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -33,6 +35,7 @@ public class ItemCatServiceImpl implements ItemCatService {
         return itemCatTreeNodes;
     }
 
+    @Transactional
     @Override
     public void addItemCat(ItemCateParameter param) {
         if (ItemCateParameter.SON_LEVEL.equals(param.getAddway())) {
@@ -59,6 +62,40 @@ public class ItemCatServiceImpl implements ItemCatService {
         return itemCat;
     }
 
+    @Transactional
+    @Override
+    public void updateItemCat(ItemCat itemCat) {
+        if (itemCat.getName() == null) {//删除操作
+            Integer id = itemCat.getId();
+            ItemCatExample example = new ItemCatExample();
+            example.createCriteria().andParentIdEqualTo(id);
+            //删除子类目
+            mapper.deleteByExample(example);
+
+            //获得当前类目
+            ItemCat currentItemCat = mapper.selectByPrimaryKey(id);
+            Integer parentId = currentItemCat.getParentId();
+
+            //删除当前类目
+            mapper.deleteByPrimaryKey(id);
+
+            //查找删除类目的同级类目
+            ItemCatExample itemCatExample = new ItemCatExample();
+            itemCatExample.createCriteria().andParentIdEqualTo(parentId);
+            List<ItemCat> itemCats = mapper.selectByExample(itemCatExample);
+
+            //如果没有兄弟类目  修改父类目的isParent属性为0
+            if (itemCats == null || itemCats.size() < 1) {
+                ItemCat parentItemCat = mapper.selectByPrimaryKey(parentId);
+                parentItemCat.setIsParent(0);
+                parentItemCat.setUpdateTime(new Date());
+                mapper.updateByPrimaryKey(parentItemCat);
+            }
+
+        } else {//修改操作
+            mapper.updateById(itemCat);
+        }
+    }
     private ArrayList<ItemCatTreeNode> toFormatTreeDept(List<ItemCat> list) {
         if (list == null || list.size() < 1) {
             return null;
@@ -106,4 +143,6 @@ public class ItemCatServiceImpl implements ItemCatService {
             treeNode(sonList, list, children);
         }
     }
+
+
 }
