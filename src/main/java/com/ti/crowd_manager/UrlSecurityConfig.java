@@ -26,8 +26,8 @@ public class UrlSecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 .formLogin().and()
                 .authorizeRequests()
-                .antMatchers("/**").authenticated()
-                .anyRequest().permitAll()
+                .antMatchers("/**/*.png").permitAll()
+                .anyRequest().authenticated()
                 .and().headers().frameOptions().disable()
                 .and().csrf().disable();
     }

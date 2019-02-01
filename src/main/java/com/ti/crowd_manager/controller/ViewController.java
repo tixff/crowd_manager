@@ -70,4 +70,12 @@ public class ViewController {
         model.addAttribute("itemCat", itemCat);
         return "cate-update";
     }
+
+    @GetMapping("/advertising-add.html")
+    public String advertising(Model model, Integer id) {
+        Item item = itemService.findItemById(id);
+        model.addAttribute("item", item);
+        return "advertising-add";
+    }
+
 }

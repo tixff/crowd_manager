@@ -8,6 +8,6 @@ import lombok.Data;
  */
 @Data
 public class PageQuery {
-    private Long rows = 2l;
+    private Long rows = 6l;
     private Long currentPage = 1l;
 }

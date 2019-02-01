@@ -29,10 +29,11 @@
             <property name="enableSubPackages" value="true"/>
         </javaClientGenerator>
 
-        <table tableName="item" domainObjectName="Item"/>
+        <!--<table tableName="item" domainObjectName="Item"/>
         <table tableName="item_detail" domainObjectName="ItemDetail"/>
         <table tableName="item_cat" domainObjectName="ItemCat"/>
         <table tableName="manager" domainObjectName="Manager"/>
-        <table tableName="user" domainObjectName="User"/>
+        <table tableName="user" domainObjectName="User"/>-->
+        <table tableName="advertisement" domainObjectName="Advertisement" />
     </context>
 </generatorConfiguration>
