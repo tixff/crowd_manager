@@ -23,4 +23,6 @@ public interface ItemService {
     PageResult<Item> getItemPage(PageQuery query);
 
     void bathRemoveItem(QueryParameter parameter);
+
+    int updateItemCurrentMoneyAndContibuteNum(Item item);
 }

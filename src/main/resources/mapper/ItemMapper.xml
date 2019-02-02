@@ -529,4 +529,10 @@
             </if>
         </where>
     </delete>
+
+    <update id="updateItemMoney" parameterType="com.ti.crowd_manager.domain.Item">
+        update item
+        set `current_money` = `current_money` + #{currentMoney}, contribute_num = `contribute_num` + #{contributeNum}
+        where id=#{id}
+    </update>
 </mapper>

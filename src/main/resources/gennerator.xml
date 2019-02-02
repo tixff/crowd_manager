@@ -34,6 +34,6 @@
         <table tableName="item_cat" domainObjectName="ItemCat"/>
         <table tableName="manager" domainObjectName="Manager"/>
         <table tableName="user" domainObjectName="User"/>-->
-        <table tableName="advertisement" domainObjectName="Advertisement" />
+        <table tableName="user" domainObjectName="User" />
     </context>
 </generatorConfiguration>

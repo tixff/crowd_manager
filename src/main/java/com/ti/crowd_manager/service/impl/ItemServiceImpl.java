@@ -2,9 +2,12 @@ package com.ti.crowd_manager.service.impl;
 
 import com.ti.crowd_manager.domain.Item;
 import com.ti.crowd_manager.domain.ItemExample;
+import com.ti.crowd_manager.domain.User;
+import com.ti.crowd_manager.domain.UserExample;
 import com.ti.crowd_manager.domain.parameter.PageQuery;
 import com.ti.crowd_manager.domain.parameter.QueryParameter;
 import com.ti.crowd_manager.mapper.ItemMapper;
+import com.ti.crowd_manager.mapper.UserMapper;
 import com.ti.crowd_manager.result.PageResult;
 import com.ti.crowd_manager.service.ItemService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +26,9 @@ import java.util.List;
 public class ItemServiceImpl implements ItemService {
     @Autowired
     private ItemMapper mapper;
+
+    @Autowired
+    private UserMapper userMapper;
 
     @Override
     @Transactional
@@ -87,5 +93,22 @@ public class ItemServiceImpl implements ItemService {
     @Transactional
     public void bathRemoveItem(QueryParameter parameter) {
         mapper.deleteItemByIds(parameter);
+    }
+
+    @Transactional
+    @Override
+    public int updateItemCurrentMoneyAndContibuteNum(Item item) {
+        UserExample example = new UserExample();
+        example.createCriteria().andNameEqualTo(item.getUserName());
+        List<User> userList = userMapper.selectByExample(example);
+        if(userList!=null&&userList.size()>0){
+            User user = userList.get(0);
+            user.setMoney(user.getMoney()-item.getCurrentMoney());
+            userMapper.updateByPrimaryKey(user);
+            mapper.updateItemMoney(item);
+            return 1;
+        }else {
+            return 0;
+        }
     }
 }

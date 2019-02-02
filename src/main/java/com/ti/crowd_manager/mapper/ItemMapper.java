@@ -103,4 +103,6 @@ public interface ItemMapper {
     ArrayList<Item> selectByLimit(QueryParameter parameter);
 
     void deleteItemByIds(QueryParameter parameter);
+
+    void updateItemMoney(Item item);
 }

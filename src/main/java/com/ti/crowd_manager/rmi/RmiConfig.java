@@ -2,6 +2,7 @@ package com.ti.crowd_manager.rmi;
 
 import com.ti.crowd_manager.service.AdvertiseService;
 import com.ti.crowd_manager.service.ItemDetailService;
+import com.ti.crowd_manager.service.ItemService;
 import com.ti.crowd_manager.service.UserService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -39,6 +40,15 @@ public class RmiConfig {
         exporter.setService(service);
         exporter.setServiceName("itemDetailService");
         exporter.setServiceInterface(ItemDetailService.class);
+        return exporter;
+    }
+
+    @Bean
+    RmiServiceExporter rmiItemExporter(ItemService service) {
+        RmiServiceExporter exporter = new RmiServiceExporter();
+        exporter.setService(service);
+        exporter.setServiceName("itemService");
+        exporter.setServiceInterface(ItemService.class);
         return exporter;
     }
 }
