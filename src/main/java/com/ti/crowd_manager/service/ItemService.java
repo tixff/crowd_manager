@@ -24,5 +24,5 @@ public interface ItemService {
 
     void bathRemoveItem(QueryParameter parameter);
 
-    int updateItemCurrentMoneyAndContibuteNum(Item item);
+    Item updateItemCurrentMoneyAndContibuteNum(Item item);
 }

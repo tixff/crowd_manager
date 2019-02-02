@@ -97,7 +97,7 @@ public class ItemServiceImpl implements ItemService {
 
     @Transactional
     @Override
-    public int updateItemCurrentMoneyAndContibuteNum(Item item) {
+    public Item updateItemCurrentMoneyAndContibuteNum(Item item) {
         UserExample example = new UserExample();
         example.createCriteria().andNameEqualTo(item.getUserName());
         List<User> userList = userMapper.selectByExample(example);
@@ -106,9 +106,10 @@ public class ItemServiceImpl implements ItemService {
             user.setMoney(user.getMoney()-item.getCurrentMoney());
             userMapper.updateByPrimaryKey(user);
             mapper.updateItemMoney(item);
-            return 1;
+            Item updateItem = mapper.selectByPrimaryKey(item.getId());
+            return updateItem;
         }else {
-            return 0;
+            return null;
         }
     }
 }
